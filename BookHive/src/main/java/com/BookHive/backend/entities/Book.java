@@ -1,12 +1,6 @@
 package com.BookHive.backend.entities;
 
-//import com.BookHive.backend.entities.Author;
-
 import jakarta.persistence.*;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter; 
 
 @Entity
 @Table(name = "books")

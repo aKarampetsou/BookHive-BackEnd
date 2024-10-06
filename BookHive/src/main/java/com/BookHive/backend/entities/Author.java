@@ -2,12 +2,13 @@ package com.BookHive.backend.entities;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "authors")
+
+@Entity //Δηλώνεται ότι η κλάση Authors είναι μια οντότητα που ανιτστοιχεί σε έναν πίνακα της ΒΔ
+@Table(name = "authors", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "surname"})}) /*Ο συνδυασμός όνομα-επώνυμο είναι μοναδικός για κάθε συγγραφέα*/
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Auto-increment id 
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -17,7 +18,7 @@ public class Author {
     private String surname;
 
     // Constructors
-    public Author() {
+    public Author() { //constructor χωρίς ορίσματα απαραίτητος για το JPA
     }
 
     public Author(String name, String surname) {
