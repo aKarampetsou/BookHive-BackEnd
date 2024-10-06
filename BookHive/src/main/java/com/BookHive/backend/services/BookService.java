@@ -38,7 +38,7 @@ public class BookService {
             book.setAuthor(bookDetails.getAuthor());
             return bookRepository.save(book);
         }
-        return null; // ή μπορείς να πετάξεις exception
+        return null; 
     }
 
     // Διαγραφή βιβλίου
