@@ -3,16 +3,20 @@ package com.BookHive.backend.services;
 import java.util.List;
 import java.util.Optional;
 import com.BookHive.backend.entities.Author;
+import com.BookHive.backend.entities.Book;
 import com.BookHive.backend.repositories.AuthorRepository;
+import com.BookHive.backend.repositories.BookRepository; // Εισαγωγή του BookRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookRepository bookRepository;  // Δήλωση και αυτόματο dependency injection για το BookRepository
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
@@ -30,7 +34,7 @@ public class AuthorService {
         authorRepository.deleteById(id);
     }
 
-    //μέθοδος για την ενημέρωση υπάρχοντος συγγραφέα
+    // Μέθοδος για την ενημέρωση υπάρχοντος συγγραφέα
     public Author updateAuthor(Long id, Author authorDetails) {
         Optional<Author> optionalAuthor = authorRepository.findById(id); // Εύρεση του συγγραφέα με το συγκεκριμένο ID
 
@@ -45,5 +49,10 @@ public class AuthorService {
             return authorRepository.save(author);
         } 
         return null; // Επιστροφή null αν ο συγγραφέας δεν βρεθεί
+    }
+
+    // Νέα μέθοδος για την εύρεση των βιβλίων ενός συγγραφέα
+    public List<Book> getBooksByAuthor(Long authorId) {
+        return bookRepository.findByAuthorId(authorId);  // Χρησιμοποιούμε το bookRepository για να βρούμε τα βιβλία του συγγραφέα
     }
 }

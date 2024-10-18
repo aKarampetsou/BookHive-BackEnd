@@ -1,6 +1,7 @@
 package com.BookHive.backend.controllers;
 
 import com.BookHive.backend.entities.Author; // Εισαγωγή της οντότητας Authors
+import com.BookHive.backend.entities.Book; // Εισαγωγή της οντότητας Books
 import com.BookHive.backend.services.AuthorService; // Εισαγωγή της υπηρεσίας AuthorsService
 import org.springframework.beans.factory.annotation.Autowired; // Εισαγωγή του Autowired
 import org.springframework.http.HttpStatus; // Εισαγωγή του HttpStatus
@@ -56,5 +57,13 @@ public class AuthorController {
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
         authorsService.deleteAuthor(id); // Διαγραφή του συγγραφέα
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Επιστροφή status 204
+    }
+
+    // ΝΕΟ Endpoint για την εύρεση των βιβλίων ενός συγγραφέα
+    @GetMapping("/{id}/books") // GET /api/authors/{id}/books
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable Long id) {
+        List<Book> books = authorsService.getBooksByAuthor(id); // Κλήση της υπηρεσίας για εύρεση των βιβλίων του συγγραφέα
+        return !books.isEmpty() ? new ResponseEntity<>(books, HttpStatus.OK) // Αν υπάρχουν βιβλία, τα επιστρέφει
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND); // Αν δεν υπάρχουν, επιστρέφει 404
     }
 }
