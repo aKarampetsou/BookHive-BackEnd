@@ -66,4 +66,11 @@ public class AuthorController {
         return !books.isEmpty() ? new ResponseEntity<>(books, HttpStatus.OK) // Αν υπάρχουν βιβλία, τα επιστρέφει
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND); // Αν δεν υπάρχουν, επιστρέφει 404
     }
+
+    // ΝΕΟ Endpoint για την προσθήκη βιβλίου σε συγγραφέα
+    @PostMapping("/{id}/books")
+    public ResponseEntity<Book> addBookToAuthor(@PathVariable Long id, @RequestBody Book book) {
+        Book newBook = authorsService.addBookToAuthor(id, book); // Προσθήκη βιβλίου στον συγγραφέα
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED); // Επιστροφή του νέου βιβλίου με status 201
+    }
 }
