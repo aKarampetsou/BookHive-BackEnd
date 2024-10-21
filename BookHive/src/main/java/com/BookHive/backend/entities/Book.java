@@ -1,9 +1,11 @@
 package com.BookHive.backend.entities;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
-@Table(name = "books", uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author_id"})})//κάθε συνδυασμός τίτλου και συγγραφέα είναι μοναδικός
+@Table(name = "books", uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author_id"})}) // κάθε συνδυασμός τίτλου και συγγραφέα είναι μοναδικός
 public class Book {
 
     @Id
@@ -16,8 +18,9 @@ public class Book {
     @Column(name = "isbn", nullable = false, unique = true, length = 13) 
     private String isbn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // Προσθήκη EAGER loading
     @JoinColumn(name = "author_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Προσθήκη για αποφυγή προβλημάτων με Lazy Loading
     private Author author;
 
     // Constructors
