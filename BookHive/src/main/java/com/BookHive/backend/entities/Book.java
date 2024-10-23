@@ -20,7 +20,8 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.EAGER) // Προσθήκη EAGER loading
     @JoinColumn(name = "author_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Προσθήκη για αποφυγή προβλημάτων με Lazy Loading
+   // @JsonBackReference // Χρησιμοποιείται για να μην έχουμε loop στο display του get αιτήματος
+    @JsonIgnoreProperties("books") // Αγνοούμε τα βιβλία στον συγγραφέα για αποφυγή αναδρομής
     private Author author;
 
     // Constructors

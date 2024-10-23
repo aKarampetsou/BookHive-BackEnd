@@ -17,28 +17,27 @@ public class BookService {
     private BookRepository bookRepository;
 
     @Autowired
-    private AuthorRepository authorRepository; // Κάνε inject το AuthorRepository εδώ
+    private AuthorRepository authorRepository; 
 
     // Δημιουργία βιβλίου
     public Book createBook(Book book) {
         Optional<Author> authorOptional = authorRepository.findById(book.getAuthor().getId());
         if (authorOptional.isPresent()) {
             book.setAuthor(authorOptional.get());  
-            return bookRepository.save(book);  // Αποθήκευση του βιβλίου
+            return bookRepository.save(book); // Αποθήκευση του βιβλίου
         } else {
             throw new RuntimeException("Author not found with id: " + book.getAuthor().getId());
         }
     }
-    
-    
+
     // Εύρεση βιβλίου με βάση το id
     public Optional<Book> getBookById(Long id) {
-        return bookRepository.findById(id);
+        return bookRepository.findById(id); // Εύρεση βιβλίου με βάση το ID
     }
 
     // Λίστα όλων των βιβλίων
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return bookRepository.findAll(); // Λίστα βιβλίων
     }
 
     // Ενημέρωση βιβλίου
@@ -47,14 +46,22 @@ public class BookService {
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             book.setTitle(bookDetails.getTitle());
-            book.setAuthor(bookDetails.getAuthor());
-            return bookRepository.save(book);
+            book.setIsbn(bookDetails.getIsbn());
+
+            Optional<Author> optionalAuthor = authorRepository.findById(bookDetails.getAuthor().getId());
+            if (optionalAuthor.isPresent()) {
+                book.setAuthor(optionalAuthor.get()); // Ενημέρωση του συγγραφέα
+            } else {
+                throw new RuntimeException("Author not found with id: " + bookDetails.getAuthor().getId());
+            }
+
+            return bookRepository.save(book); // Αποθήκευση του ενημερωμένου βιβλίου
         }
-        return null; 
+        return null; // Αν το βιβλίο δεν βρεθεί
     }
 
     // Διαγραφή βιβλίου
     public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+        bookRepository.deleteById(id); // Διαγραφή βιβλίου
     }
 }

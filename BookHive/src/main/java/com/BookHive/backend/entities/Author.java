@@ -2,6 +2,8 @@ package com.BookHive.backend.entities;
 
 import jakarta.persistence.*;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity // Δηλώνεται ότι η κλάση Authors είναι μια οντότητα που αντιστοιχεί σε έναν πίνακα της ΒΔ
 @Table(name = "authors", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "surname"})}) /* Ο συνδυασμός όνομα-επώνυμο είναι μοναδικός για κάθε συγγραφέα */
@@ -18,6 +20,7 @@ public class Author {
     private String surname;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("author") // Αγνοούμε τον συγγραφέα στα βιβλία
     private List<Book> books; // με το cascade delete εάν διαγραφεί ένας συγγραφέας, διαγράφονται και τα βιβλία του 
 
     // Constructors
