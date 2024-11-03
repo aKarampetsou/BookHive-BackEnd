@@ -26,6 +26,11 @@ public class UsersService {
     public Optional<Users> findUserById(Long id) {
         return usersRepository.findById(id); // Επιστρέφει τον χρήστη αν βρεθεί
     }
+   
+    //Μέθοδος για την εύρεση χρήστη με βάση το username 
+    public Users findByUsername(String username) {
+        return usersRepository.findByUsername(username); // Επιστρέφει Users ή null αν δεν βρεθεί
+    } 
 
     // Μέθοδος για τη δημιουργία νέου χρήστη
     public Users createUser(Users user) {
@@ -48,4 +53,5 @@ public class UsersService {
     public void deleteUser(Long id) {
         usersRepository.deleteById(id); 
     }
+    
 }
