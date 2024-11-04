@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired; // Εισαγωγ
 import org.springframework.http.HttpStatus; // Εισαγωγή του HttpStatus
 import org.springframework.http.ResponseEntity; // Εισαγωγή του ResponseEntity
 import org.springframework.web.bind.annotation.*; // Εισαγωγή των HTTP αναφορών
-
 import java.util.List; // Εισαγωγή της λίστας
 import java.util.Optional; // Εισαγωγή του Optional
 
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController // Κάνει την κλάση αυτή έναν RESTful controller
 @RequestMapping("/api/authors") // Ορισμός του base URL για τους συγγραφείς
 public class AuthorController {

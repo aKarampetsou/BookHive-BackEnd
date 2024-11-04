@@ -13,6 +13,7 @@ import com.BookHive.backend.services.AuthorService;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/books") // Ορίζουμε το βασικό endpoint για books
 public class BookController {
