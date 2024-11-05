@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.BookHive.backend.services.AuthorService;
+import com.BookHive.backend.repositories.BookRepository;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ public class BookController {
 
     @Autowired
     private AuthorService authorService; // Αυτή η γραμμή έχει προστεθεί για να γίνει χρήση του AuthorService
+
+    @Autowired
+    private BookRepository bookRepository; // Προσθέτουμε το BookRepository ως dependecny σε αυτό το αρχείο
 
     // Endpoint για τη δημιουργία νέου βιβλίου
     @PostMapping // POST /api/books
@@ -65,19 +70,28 @@ public class BookController {
     @PostMapping("/addBookWithAuthor")
     public ResponseEntity<String> addBookWithAuthor(@RequestBody BookAuthorDTO bookAuthorDTO) {
         try {
-            // Έλεγχος αν ο συγγραφέας υπάρχει
+            // Έλεγχος αν το βιβλίο υπάρχει ήδη
+            boolean exists = bookRepository.existsByTitleAndAuthorAndIsbn(
+                bookAuthorDTO.getTitle(),
+                bookAuthorDTO.getAuthorName(),
+                bookAuthorDTO.getAuthorSurname(),
+                bookAuthorDTO.getIsbn()
+            );
+            
+            if (exists) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("This book already exists.");
+            }
+    
+            // Τρέχων κώδικας για δημιουργία συγγραφέα και βιβλίου
             Author author = authorService.getAuthorByNameAndSurname(bookAuthorDTO.getAuthorName(), bookAuthorDTO.getAuthorSurname());
-
             if (author == null) {
-                // Αν δεν υπάρχει, δημιουργία του νέου συγγραφέα
                 author = new Author(bookAuthorDTO.getAuthorName(), bookAuthorDTO.getAuthorSurname());
                 authorService.createAuthor(author);
             }
-
-            // Δημιουργία του βιβλίου
+    
             Book book = new Book(bookAuthorDTO.getTitle(), bookAuthorDTO.getIsbn(), author);
             bookService.createBook(book);
-
+    
             return new ResponseEntity<>("Book and Author added successfully!", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
