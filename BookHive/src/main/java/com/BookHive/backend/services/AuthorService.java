@@ -28,8 +28,12 @@ public class AuthorService {
         return authorRepository.findById(id); // Εύρεση συγγραφέα με βάση το ID
     }
 
-    // Δημιουργεί έναν νέο συγγραφέα στη βάση δεδομένων
+    // Δημιουργεί έναν νέο συγγραφέα στη βάση δεδομένων με έλεγχο ύπαρξης
     public Author createAuthor(Author author) {
+        Optional<Author> existingAuthor = authorRepository.findByNameAndSurname(author.getName(), author.getSurname());
+        if (existingAuthor.isPresent()) {
+            throw new IllegalArgumentException("Author with this name and surname already exists.");
+        }
         return authorRepository.save(author); // Αποθήκευση νέου συγγραφέα
     }
 
@@ -69,6 +73,6 @@ public class AuthorService {
 
     // Μέθοδος για αναζήτηση συγγραφέα με βάση το όνομα και το επώνυμο
     public Author getAuthorByNameAndSurname(String name, String surname) {
-        return authorRepository.findByNameAndSurname(name, surname); // Αναζήτηση συγγραφέα
+        return authorRepository.findByNameAndSurname(name, surname).orElse(null); // Αναζήτηση συγγραφέα
     }
 }

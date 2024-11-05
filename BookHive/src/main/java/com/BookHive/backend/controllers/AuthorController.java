@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*; // Εισαγωγή των HTT
 import java.util.List; // Εισαγωγή της λίστας
 import java.util.Optional; // Εισαγωγή του Optional
 
-
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController // Κάνει την κλάση αυτή έναν RESTful controller
 @RequestMapping("/api/authors") // Ορισμός του base URL για τους συγγραφείς
@@ -40,17 +39,20 @@ public class AuthorController {
 
     // Endpoint για τη δημιουργία νέου συγγραφέα
     @PostMapping // POST /api/authors
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
-        Author newAuthor = authorsService.createAuthor(author); // Δημιουργία νέου συγγραφέα
-        return new ResponseEntity<>(newAuthor, HttpStatus.CREATED); // Επιστροφή του νέου συγγραφέα με status 201
+    public ResponseEntity<?> createAuthor(@RequestBody Author author) {
+        try {
+            Author newAuthor = authorsService.createAuthor(author); // Δημιουργία νέου συγγραφέα
+            return new ResponseEntity<>(newAuthor, HttpStatus.CREATED); // Επιστροφή του νέου συγγραφέα με status 201
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Επιστροφή μηνύματος σφάλματος αν ο συγγραφέας υπάρχει
+        }
     }
 
     // Endpoint για την ενημέρωση υπάρχοντος συγγραφέα
-    @PutMapping("/{id}") // PUT /api/authors/{id}
+    @PutMapping("/{id}")
     public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @RequestBody Author authorDetails) {
-        Author updatedAuthor = authorsService.updateAuthor(id, authorDetails); // Ενημέρωση του συγγραφέα
-        return updatedAuthor != null ? new ResponseEntity<>(updatedAuthor, HttpStatus.OK) // Αν ενημερωθεί, επιστρέφει τον συγγραφέα
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND); // Αλλιώς, επιστρέφει 404
+        Author updatedAuthor = authorsService.updateAuthor(id, authorDetails); // Ενημέρωση συγγραφέα μέσω του service
+        return ResponseEntity.ok(updatedAuthor);
     }
 
     // Endpoint για τη διαγραφή συγγραφέα με το συγκεκριμένο ID
@@ -60,7 +62,7 @@ public class AuthorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Επιστροφή status 204
     }
 
-    // ΝΕΟ Endpoint για την εύρεση των βιβλίων ενός συγγραφέα
+    // Endpoint για την εύρεση των βιβλίων ενός συγγραφέα
     @GetMapping("/{id}/books") // GET /api/authors/{id}/books
     public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable Long id) {
         List<Book> books = authorsService.getBooksByAuthor(id); // Κλήση της υπηρεσίας για εύρεση των βιβλίων του συγγραφέα
@@ -68,7 +70,7 @@ public class AuthorController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND); // Αν δεν υπάρχουν, επιστρέφει 404
     }
 
-    // ΝΕΟ Endpoint για την προσθήκη βιβλίου σε συγγραφέα
+    // Endpoint για την προσθήκη βιβλίου σε συγγραφέα
     @PostMapping("/{id}/books")
     public ResponseEntity<Book> addBookToAuthor(@PathVariable Long id, @RequestBody Book book) {
         Book newBook = authorsService.addBookToAuthor(id, book); // Προσθήκη βιβλίου στον συγγραφέα
