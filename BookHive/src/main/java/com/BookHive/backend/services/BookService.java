@@ -6,13 +6,14 @@ import com.BookHive.backend.repositories.AuthorRepository;
 import com.BookHive.backend.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BookService {
-
+ 
+    //Αναθέτουμε τα BookRepository και AuthorRepository στην κλαση BookService για να μπορούμε να χρησιμοποιούμε τις μεθόδους τους 
+    //για CRUD λειτουργίες 
     @Autowired
     private BookRepository bookRepository;
 
@@ -47,21 +48,19 @@ public class BookService {
             Book book = optionalBook.get();
             book.setTitle(bookDetails.getTitle());
             book.setIsbn(bookDetails.getIsbn());
-
-            Optional<Author> optionalAuthor = authorRepository.findById(bookDetails.getAuthor().getId());
-            if (optionalAuthor.isPresent()) {
-                book.setAuthor(optionalAuthor.get()); // Ενημέρωση του συγγραφέα
-            } else {
-                throw new RuntimeException("Author not found with id: " + bookDetails.getAuthor().getId());
-            }
-
-            return bookRepository.save(book); // Αποθήκευση του ενημερωμένου βιβλίου
+    
+            Author author = book.getAuthor(); // Παίρνουμε τον τρέχοντα συγγραφέα
+            author.setName(bookDetails.getAuthor().getName()); // Ενημερώνουμε το όνομα
+            author.setSurname(bookDetails.getAuthor().getSurname()); // Ενημερώνουμε το επώνυμο
+    
+            authorRepository.save(author); // Αποθηκεύουμε τις αλλαγές στον συγγραφέα
+            return bookRepository.save(book); // Αποθηκεύουμε το ενημερωμένο βιβλίο
         }
         return null; // Αν το βιβλίο δεν βρεθεί
     }
 
     // Διαγραφή βιβλίου
     public void deleteBook(Long id) {
-        bookRepository.deleteById(id); // Διαγραφή βιβλίου
+        bookRepository.deleteById(id); // χρήση της CRUD JPA μεθόδου deleteByID για διαγραφή βιβλίου
     }
 }
