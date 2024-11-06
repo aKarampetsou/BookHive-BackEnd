@@ -1,5 +1,10 @@
 package com.BookHive.backend.dto;
 
+/* Το συγκεκριμένο DataTranfserObject χρησιμοποιείται για να μεταφέρει δεδομένα μεταξύ των client και server κατά την διάρκεια
+ενός αιτήματος δημιουργίας νέου βιβλίου με νέο συγγραφέα ταυτόχρονα (endpoint:  addBookWithAuthor). Με την βοήθεια των
+getters και setters αποφεύγουμε την απευθείας πρόσβαση στις οντόντητες Books και Authors.*/
+
+
 public class BookAuthorDTO {
     private String title;
     private String isbn;
