@@ -28,9 +28,9 @@ public class UsersService {
     }
    
     //Μέθοδος για την εύρεση χρήστη με βάση το username 
-    public Users findByUsername(String username) {
-        return usersRepository.findByUsername(username); // Επιστρέφει Users ή null αν δεν βρεθεί
-    } 
+    public Optional<Users> findByUsername(String username) {
+        return usersRepository.findByUsername(username); // Επιστρέφει Optional<Users>
+    }
 
     // Μέθοδος για τη δημιουργία νέου χρήστη
     public Users createUser(Users user) {
