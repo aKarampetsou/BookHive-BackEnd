@@ -1,33 +1,34 @@
 package com.BookHive.backend.controllers;
 
+import com.BookHive.backend.util.JwtService;
+import com.BookHive.backend.repositories.UsersRepository;
 import com.BookHive.backend.entities.Users;
-import com.BookHive.backend.services.UsersService;
+import com.BookHive.backend.dto.LoginRequest;
+import com.BookHive.backend.dto.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 
 @RestController
-//Ρύθμιση endpoint /auth/login που χειρίζεται αιτήματα για σύνδεση χρηστών
-// το σύστημα συγκρίνει τον κωδικό που εισάγει ο χρήστης με τον αποθηκευμένο κωδικό πρόσβασης στη βάση δεδομένων
-//Αν ταιριάζουν:Επιστρέφεται μήνυμα επιτυχίας και κωδικός 200 OK
-//Αν δεν ταιριάζουν, επιστρέφεται μήνυμα αποτυχίας με 401 Unauthorized
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000") // Επιτρέπει αιτήματα από το React app
 public class AuthController {
 
     @Autowired
-    private UsersService usersService;
+    private UsersRepository userRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody Users user) {
-        Users foundUser = usersService.findByUsername(user.getUsername());
-        
-        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
-            return new ResponseEntity<>(HttpStatus.OK); // Επιτυχής σύνδεση
+       public LoginResponse login(@RequestBody LoginRequest request) {
+       Optional<Users> user = userRepository.findByUsername(request.getUsername());
+         if (user.isPresent() && user.get().getPassword().equals(request.getPassword())) {
+           String token = jwtService.generateToken(request.getUsername());
+            return new LoginResponse(token); // Επιστροφή με σωστό κλειδί
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Αποτυχία σύνδεσης
-        }
-    }
+        throw new RuntimeException("Invalid credentials");
+     }
+   }
 }
