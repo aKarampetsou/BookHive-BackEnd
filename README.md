@@ -1,20 +1,45 @@
+
+---
+
+### README for **BookHive-BackEnd**
+
+```markdown
 # BookHive-BackEnd
 
-## Περιγραφή
+BookHive is a Library Management Web Application designed for managing books and authors. This repository contains the backend implementation of the BookHive project, developed using Spring Boot and PostgreSQL.
 
-Το **BookHive** είναι μια web εφαρμογή που επιτρέπει στους χρήστες να διαχειρίζονται βιβλία και συγγραφείς (οργάνωση βιβλιοθήκης) μέσω μιας φιλικής προς τον χρήστη διεπαφής. 
-Η εφαρμογή υποστηρίζει λειτουργίες CRUD (Δημιουργία, Ανάγνωση, Ενημέρωση, Διαγραφή) για τις οντότητες βιβλίων και συγγραφέων, με έμφαση στην ασφάλεια μέσω authentication με JWT.
+---
 
-## Τεχνολογίες
+## Features
 
-- **Frontend:** ReactJS με MaterialUI
-- **Backend:** Spring Boot RESTful API
-- **Βάση Δεδομένων:** PostgreSQL
-- **Authentication:** JWT
+- RESTful API for managing books and authors.
+- Authentication and authorization using JWT.
+- CRUD operations for books and authors.
+- Database integration with PostgreSQL.
 
-## Χαρακτηριστικά
+---
 
-- Δημιουργία, προβολή, ενημέρωση και διαγραφή συγγραφέων και βιβλίων.
-- Περιορισμοί που απαγορεύουν δύο συγγραφείς να μοιράζονται το ίδιο όνομα και επώνυμο, καθώς και δύο βιβλία το ίδιο ISBN.
-- Εύχρηστη διεπαφή που προσαρμόζεται σε κινητές συσκευές.
-- Σφάλματα από το backend εμφανίζονται με κομψό τρόπο στο frontend.
+## Technologies
+
+- **Spring Boot**: Backend framework.
+- **PostgreSQL**: Relational database.
+- **JWT**: For secure user authentication.
+- **Hibernate**: ORM for database operations.
+
+---
+
+## Prerequisites
+
+To run this project locally, you need:
+
+- **Java**: JDK 11 or later.
+- **Maven**: v3.6.0 or later.
+- **PostgreSQL**: v12.0 or later.
+
+---
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/aKarampetsou/BookHive-BackEnd.git
