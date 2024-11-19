@@ -1,33 +1,31 @@
-CREATE TABLE IF NOT EXISTS public."Authors" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    surname VARCHAR(255) NOT NULL,
-    CONSTRAINT unique_author UNIQUE (name, surname)
+-- Δημιουργία πίνακα Authors
+CREATE TABLE Authors (
+    id SERIAL PRIMARY KEY, 
+    name VARCHAR(100) NOT NULL, 
+    surname VARCHAR(100) NOT NULL, 
+    CONSTRAINT unique_author UNIQUE (name, surname) -- Δεν μπορούν να υπάρχουν δύο συγγραφείς με το ίδιο όνομα και επώνυμο
 );
 
-CREATE TABLE IF NOT EXISTS public."Books" (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    isbn VARCHAR(13) UNIQUE NOT NULL,
-    author_id INTEGER NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES public."Authors" (id) ON DELETE CASCADE,
+-- Δημιουργία πίνακα Books
+CREATE TABLE Books (
+    id SERIAL PRIMARY KEY, 
+    title VARCHAR(255) NOT NULL, 
+    isbn VARCHAR(13) UNIQUE NOT NULL, 
+    author_id INTEGER NOT NULL, -
+    FOREIGN KEY (author_id) REFERENCES Authors(id) ON DELETE CASCADE, -- Αν διαγραφεί ένας συγγραφέας, διαγράφονται και τα βιβλία του
     CONSTRAINT unique_book_author UNIQUE (title, author_id)
 );
 
-CREATE TABLE IF NOT EXISTS public."Users" (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-); 
+-- Εισαγωγή συγγραφέων στον πίνακα Authors
+INSERT INTO Authors (name, surname) VALUES ('J.K.', 'Rowling'); 
+INSERT INTO Authors (name, surname) VALUES ('George', 'Orwell'); 
+INSERT INTO Authors (name, surname) VALUES ('F. Scott', 'Fitzgerald'); 
+INSERT INTO Authors (name, surname) VALUES ('Harper', 'Lee');
+INSERT INTO Authors (name, surname) VALUES ('J.R.R.', 'Tolkien'); 
 
-INSERT INTO public."Authors" (name, surname) VALUES
-('J.K.', 'Rowling'),
-('George', 'Orwell'),
-('F. Scott', 'Fitzgerald'),
-('Harper', 'Lee');
-
-INSERT INTO public."Books" (title, isbn, author_id) VALUES
-('Harry Potter and the Chamber of Secrets', '9780747538490', 1),
-('1984', '9780451524935', 2),
-('The Great Gatsby', '9780743273565', 3),
-('To Kill a Mockingbird', '9780061120084', 4);
+-- Εισαγωγή βιβλίων στον πίνακα Books
+INSERT INTO Books (title, isbn, author_id) VALUES ('Harry Potter and the Chamber of Secrets', '9780747538490', 1);
+INSERT INTO Books (title, isbn, author_id) VALUES ('1984', '9780451524935', 2);
+INSERT INTO Books (title, isbn, author_id) VALUES ('The Great Gatsby', '9780743273565', 3);
+INSERT INTO Books (title, isbn, author_id) VALUES ('To Kill a Mockingbird', '9780061120084', 4);
+INSERT INTO Books (title, isbn, author_id) VALUES ('The Hobbit', '9780547928227', 5);
